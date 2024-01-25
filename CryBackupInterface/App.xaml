@@ -1,0 +1,28 @@
+﻿<Application x:Class="CryBackupInterface.App"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:local="clr-namespace:CryBackupInterface"
+             StartupUri="MainWindow.xaml">
+
+    <Application.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="/CryLib.WPF;component/Styles.xaml"/>
+            </ResourceDictionary.MergedDictionaries>
+
+            <!--#region Auto Applied Styles-->
+            <Style TargetType="{x:Type ComboBox}" BasedOn="{StaticResource CryComboBoxStyle}"/>
+
+            <Style TargetType="{x:Type ComboBoxItem}" BasedOn="{StaticResource CryComboBoxItemStyle}"/>
+
+            <Style TargetType="{x:Type ScrollViewer}" BasedOn="{StaticResource CryScrollViewerControlStyle}"/>
+
+            <Style TargetType="{x:Type GroupBox}" BasedOn="{StaticResource CryGroupBoxStyle}"/>
+
+            <Style TargetType="Label">
+                <Setter Property="Foreground" Value="White"/>
+            </Style>
+            <!--#endregion Auto Applied Styles-->
+        </ResourceDictionary>
+    </Application.Resources>
+</Application>

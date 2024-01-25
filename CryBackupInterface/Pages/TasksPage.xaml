@@ -1,0 +1,117 @@
+﻿<Page x:Class="CryBackupInterface.TasksPage"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:local="clr-namespace:CryBackupInterface"
+      xmlns:Cry="clr-namespace:CryLib.WPF;assembly=CryLib.WPF"
+      mc:Ignorable="d" 
+      d:DesignHeight="450" d:DesignWidth="800"
+      DataContext="{x:Static local:Globals.InteractionModel}"
+      Title="TasksPage">
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="30"/>
+            <RowDefinition/>
+        </Grid.RowDefinitions>
+
+        <Grid Grid.Row="0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition/>
+                <ColumnDefinition Width="auto"/>
+            </Grid.ColumnDefinitions>
+
+            <StackPanel Grid.Column="0" Orientation="Horizontal" Margin="3">
+
+            </StackPanel>
+
+            <StackPanel Grid.Column="1" Orientation="Horizontal" Margin="3">
+                <Cry:CryButton Width="80" Child="Refresh" ButtonClicked="CryButton_ButtonClicked"/>
+            </StackPanel>
+        </Grid>
+
+        <ScrollViewer Grid.Row="1" HorizontalScrollBarVisibility="Hidden" VerticalScrollBarVisibility="Auto">
+            <ItemsControl ItemsSource="{Binding Tasks.Tasks, UpdateSourceTrigger=PropertyChanged}">
+                <ItemsControl.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <StackPanel Orientation="Vertical" VerticalAlignment="Stretch"/>
+                    </ItemsPanelTemplate>
+                </ItemsControl.ItemsPanel>
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate>
+                        <Border Background="#FF454545" CornerRadius="10" Margin="5">
+                            <Grid Margin="3">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="auto"/>
+                                    <ColumnDefinition Width="1*"/>
+                                    <ColumnDefinition Width="auto"/>
+                                    <ColumnDefinition Width="auto"/>
+                                    <ColumnDefinition Width="260"/>
+                                    <ColumnDefinition Width="120"/>
+                                </Grid.ColumnDefinitions>
+
+                                <Grid.Resources>
+                                    <Style TargetType="Label">
+                                        <Setter Property="Foreground" Value="White"/>
+                                        <Setter Property="HorizontalAlignment" Value="Left"/>
+                                        <Setter Property="VerticalAlignment" Value="Center"/>
+                                    </Style>
+                                </Grid.Resources>
+
+                                <Label Grid.Column="0" Content="{Binding Name}"/>
+                                <Label Grid.Column="1" Content="{Binding Info.Info}"/>
+                                <Label Grid.Column="2" Content="{Binding Info.CreationTime}"/>
+                                <Label Grid.Column="3" Content="{Binding Info.LastUpdatedTime}"/>
+                                <Label Grid.Column="4" Content="{Binding ID}" HorizontalAlignment="Center"/>
+
+                                <Border Grid.Column="5" BorderThickness="2" CornerRadius="10" Padding="5" Width="100" HorizontalAlignment="Right">
+                                    <Border.Style>
+                                        <Style TargetType="Border">
+                                            <Setter Property="BorderBrush" Value="#FF353535"/>
+                                            <Style.Triggers>
+                                                <DataTrigger Binding="{Binding Info.Status}" Value="Succeded">
+                                                    <Setter Property="BorderBrush" Value="LightGreen"/>
+                                                </DataTrigger>
+                                                <DataTrigger Binding="{Binding Info.Status}" Value="Failed">
+                                                    <Setter Property="BorderBrush" Value="OrangeRed"/>
+                                                </DataTrigger>
+                                                <DataTrigger Binding="{Binding Info.Status}" Value="Running">
+                                                    <Setter Property="BorderBrush" Value="RoyalBlue"/>
+                                                </DataTrigger>
+                                                <DataTrigger Binding="{Binding Info.Status}" Value="AwaitingStart">
+                                                    <Setter Property="BorderBrush" Value="LightGreen"/>
+                                                </DataTrigger>
+                                            </Style.Triggers>
+                                        </Style>
+                                    </Border.Style>
+
+                                    <TextBlock Foreground="White" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="14px">
+                                        <TextBlock.Style>
+                                            <Style TargetType="TextBlock">
+                                                <Style.Triggers>
+                                                    <DataTrigger Binding="{Binding Info.Status}" Value="Succeded">
+                                                        <Setter Property="Text" Value="Succeded"/>
+                                                    </DataTrigger>
+                                                    <DataTrigger Binding="{Binding Info.Status}" Value="Failed">
+                                                        <Setter Property="Text" Value="Failed"/>
+                                                    </DataTrigger>
+                                                    <DataTrigger Binding="{Binding Info.Status}" Value="Running">
+                                                        <Setter Property="Text" Value="Running"/>
+                                                    </DataTrigger>
+                                                    <DataTrigger Binding="{Binding Info.Status}" Value="AwaitingStart">
+                                                        <Setter Property="Text" Value="Awaiting Start"/>
+                                                    </DataTrigger>
+                                                </Style.Triggers>
+                                            </Style>
+                                        </TextBlock.Style>
+                                    </TextBlock>
+                                </Border>
+                            </Grid>
+                        </Border>
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>
+        </ScrollViewer>
+    </Grid>
+</Page>

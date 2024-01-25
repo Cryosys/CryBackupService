@@ -1,0 +1,60 @@
+﻿<Page x:Class="CryBackupInterface.ServiceSettingsPage"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:local="clr-namespace:CryBackupInterface"
+      xmlns:cry="clr-namespace:CryLib.WPF;assembly=CryLib.WPF"
+      mc:Ignorable="d" 
+      d:DesignHeight="450" d:DesignWidth="800"
+      DataContext="{x:Static local:Globals.InteractionModel}"
+      Title="ServiceSettingsPage">
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="0.15*"/>
+            <RowDefinition/>
+            <RowDefinition Height="0.15*"/>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="0.15*"/>
+            <ColumnDefinition/>
+            <ColumnDefinition Width="0.15*"/>
+        </Grid.ColumnDefinitions>
+
+        <Grid Grid.Row="1" Grid.Column="1" Background="#FF454545">
+            <Grid.RowDefinitions>
+                <RowDefinition/>
+                <RowDefinition Height="auto"/>
+            </Grid.RowDefinitions>
+            
+            <UniformGrid Grid.Row="0" Columns="2" VerticalAlignment="Top" Margin="15" DataContext="{Binding Settings}">
+                <Label Content="Source path:"/>
+                <cry:TextBox Text="{Binding SourcePath, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" ButtonVisibility="Collapsed"/>
+                
+                <Label Content="Target path:"/>
+                <cry:TextBox Text="{Binding TargetPath, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" ButtonVisibility="Collapsed"/>
+                
+                <Label Content="Revision collection metadata path:"/>
+                <cry:TextBox Text="{Binding RevisionCollectionMetaDataPath, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" ButtonVisibility="Collapsed"/>
+                
+                <Label Content="Revision storage path:"/>
+                <cry:TextBox Text="{Binding RevisionStoragePath, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" ButtonVisibility="Collapsed"/>
+                
+                <Label Content="Enable hash compare:"/>
+                <cry:SliderCheckBox Checkstate="{Binding EnableHashCompare, Mode=TwoWay}" CheckBoxStyle="Corners"/>
+                
+                <Label Content="Ignore thumbs.db:"/>
+                <cry:SliderCheckBox Checkstate="{Binding IgnoreThumbsDB, Mode=TwoWay}" CheckBoxStyle="Corners"/>
+                
+                <Label Content="Keep deleted files and directories:"/>
+                <cry:SliderCheckBox Checkstate="{Binding KeepDeletedFilesAndDirectories, Mode=TwoWay}" CheckBoxStyle="Corners"/>
+                
+                <Label Content="Data retention:"/>
+                <cry:TextBox Text="{Binding DataRetention, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay, Converter={cry:IntToStringConverter}}" ButtonVisibility="Collapsed"/>
+            </UniformGrid>
+
+            <cry:CryButton Grid.Row="1" Child="Send" Width="120" Margin="15" ContentMargin="10" HorizontalAlignment="Center" ButtonClicked="CryButton_ButtonClicked"/>
+        </Grid>
+    </Grid>
+</Page>

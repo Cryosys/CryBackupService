@@ -1,0 +1,36 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net8.0-windows10.0.20348.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <UseWPF>true</UseWPF>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Remove="Images\Explorer.svg" />
+    <None Remove="Images\Restore.svg" />
+    <None Remove="Images\Schedules.svg" />
+    <None Remove="Images\Settings.svg" />
+    <None Remove="Images\Tasks.svg" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="CryLib.Core" Version="3.0.2" />
+    <PackageReference Include="CryLib.Network" Version="2.1.1" />
+    <PackageReference Include="CryLib.WPF" Version="3.0.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\CryBackup.CommonData\CryBackup.CommonData.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Resource Include="Images\Explorer.svg" />
+    <Resource Include="Images\Restore.svg" />
+    <Resource Include="Images\Schedules.svg" />
+    <Resource Include="Images\Settings.svg" />
+    <Resource Include="Images\Tasks.svg" />
+  </ItemGroup>
+
+</Project>

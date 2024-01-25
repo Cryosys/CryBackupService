@@ -1,0 +1,19 @@
+<Project Sdk="Microsoft.NET.Sdk.Worker">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0-windows10.0.20348.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <UserSecretsId>dotnet-CryBackupService-cead56ae-f592-40ab-ad9e-cd2b7fedbe0b</UserSecretsId>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="CryLib.Core" Version="3.0.2" />
+    <PackageReference Include="CryLib.Network" Version="2.1.1" />
+    <PackageReference Include="Microsoft.Extensions.Hosting" Version="8.0.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\CryBackup.CommonData\CryBackup.CommonData.csproj" />
+  </ItemGroup>
+</Project>
