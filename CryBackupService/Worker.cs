@@ -2,6 +2,12 @@ using CryBackup.CommonData;
 using CryLib.Core;
 using CryLib.Network;
 using CryLib.Network.Protocols;
+using NetFwTypeLib;
+using System.Diagnostics;
+using System.Linq;
+using System.Net;
+using System.Reflection;
+using System.Security.Principal;
 
 namespace CryBackupService
 {
@@ -50,6 +56,48 @@ namespace CryBackupService
 				_adaptiveLogHandler.AddLog(LogType.Network);
 				_adaptiveLogHandler.LoggedEntry += _adaptiveLogHandler_LoggedEntry;
 
+				try
+				{
+					bool bRuleExists = false;
+					Type? policyType = Type.GetTypeFromProgID("HNetCfg.FwPolicy2");
+					if (policyType != null)
+					{
+						string firewallRuleName  = Assembly.GetExecutingAssembly().GetName().Name + " inbound rule";
+						string port              = "61321";
+						INetFwPolicy2? fwPolicy2 = Activator.CreateInstance(policyType) as INetFwPolicy2;
+						if (fwPolicy2 != null)
+						{
+							foreach (INetFwRule rule in fwPolicy2.Rules)
+							{
+								// Add rule to list
+								// RuleList.Add(rule);
+								// Console.WriteLine(rule.Version);
+								if (rule.Name == firewallRuleName && rule.LocalPorts.Contains(port))
+								{
+									bRuleExists = true;
+									break;
+								}
+							}
+
+							if (!bRuleExists)
+								if (IsAdministrator())
+									AddFirewallRule(fwPolicy2, firewallRuleName, port);
+								else
+								{
+									Log("Failed to access firewall to request rule adding. The service is not running under administrator privileges. Restart the service once as an administrator to ensure that the firewall is properly configured.", LogType.WindowsService);
+								}
+						}
+					}
+					else
+					{
+						Log("Failed to access firewall to request rule adding. It seems like that the windows firewall is either not running or corrupted. Please check the running state of the firewall and restart the server.", LogType.WindowsService);
+					}
+				}
+				catch (Exception ex)
+				{
+					Log("Failed to add to firewall" + Environment.NewLine + ex.ToString(), LogType.WindowsService);
+				}
+
 				ProtocolSettings.AllowEmptySends  = true;
 				ProtocolSettings.CallDataTransfer = false;
 				ProtocolSettings.TcpNoDelay       = true;
@@ -93,7 +141,7 @@ namespace CryBackupService
 
 			if (_tcpListener is null)
 			{
-				_tcpListener                  = new TcpListenerServer(61321);
+				_tcpListener                  = new TcpListenerServer(8080);
 				_tcpListener.ClientConnected += _tcpListener_ClientConnected;
 				_tcpListener.Log             += _tcpListener_Log;
 
@@ -557,6 +605,76 @@ namespace CryBackupService
 			{
 				Log(ex.ToString(), LogType.Network, 2);
 			}
+		}
+
+		private void AddFirewallRule(INetFwPolicy2 fwPolicy2, string firewallRuleName, string port)
+		{
+			try
+			{
+				var currentProfiles = fwPolicy2.CurrentProfileTypes;
+
+				Type? ruleType = Type.GetTypeFromProgID("HNetCfg.FWRule");
+				if (ruleType is null)
+					return;
+
+				INetFwRule2? xInboundRule = Activator.CreateInstance(ruleType) as INetFwRule2;
+				if (xInboundRule is null)
+					return;
+
+				xInboundRule.Enabled = true;
+
+				// Configure rule
+				xInboundRule.Action     = NET_FW_ACTION_.NET_FW_ACTION_ALLOW;
+				xInboundRule.Protocol   = 6;	// TCP
+				xInboundRule.LocalPorts = port;
+				xInboundRule.Name       = firewallRuleName;
+				xInboundRule.Profiles   = currentProfiles;
+
+				// Add the rule
+				Type? policyType = Type.GetTypeFromProgID("HNetCfg.FwPolicy2");
+				if (policyType is null)
+					return;
+
+				INetFwPolicy2? xFirewallPolicy = Activator.CreateInstance(policyType) as INetFwPolicy2;
+				if (xFirewallPolicy is null)
+					return;
+
+				xFirewallPolicy.Rules.Add(xInboundRule);
+			}
+			catch
+			{
+				throw;
+			}
+		}
+
+		private static bool RunAsAdmin()
+		{
+			if (IsAdministrator() == false)
+			{
+				// Restart program and run as admin
+				var exeName = Process.GetCurrentProcess().MainModule?.FileName;
+				if (exeName == null)
+					throw new Exception("Could not get main module filename");
+
+				ProcessStartInfo startInfo = new ProcessStartInfo(exeName)
+				{
+					Verb = "runas"
+				};
+
+				Process.Start(startInfo);
+				Environment.Exit(0);
+				return false;
+			}
+
+			return true;
+		}
+
+		private static bool IsAdministrator()
+		{
+			// Check if this process is elevated
+			WindowsIdentity identity   = WindowsIdentity.GetCurrent();
+			WindowsPrincipal principal = new WindowsPrincipal(identity);
+			return principal.IsInRole(WindowsBuiltInRole.Administrator);
 		}
 
 		private void Prot_ProtocolLog(CommonProtocolBase prot, string info)

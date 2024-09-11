@@ -1,19 +1,31 @@
 <Project Sdk="Microsoft.NET.Sdk.Worker">
 
-  <PropertyGroup>
-    <TargetFramework>net8.0-windows10.0.20348.0</TargetFramework>
-    <Nullable>enable</Nullable>
-    <ImplicitUsings>enable</ImplicitUsings>
-    <UserSecretsId>dotnet-CryBackupService-cead56ae-f592-40ab-ad9e-cd2b7fedbe0b</UserSecretsId>
-  </PropertyGroup>
+	<PropertyGroup>
+		<TargetFramework>net8.0-windows10.0.20348.0</TargetFramework>
+		<Nullable>enable</Nullable>
+		<ImplicitUsings>enable</ImplicitUsings>
+		<UserSecretsId>dotnet-CryBackupService-cead56ae-f592-40ab-ad9e-cd2b7fedbe0b</UserSecretsId>
+	</PropertyGroup>
 
-  <ItemGroup>
-    <PackageReference Include="CryLib.Core" Version="3.0.2" />
-    <PackageReference Include="CryLib.Network" Version="2.1.1" />
-    <PackageReference Include="Microsoft.Extensions.Hosting" Version="8.0.0" />
-  </ItemGroup>
+	<ItemGroup>
+	  <COMReference Include="NetFwTypeLib">
+	    <WrapperTool>tlbimp</WrapperTool>
+	    <VersionMinor>0</VersionMinor>
+	    <VersionMajor>1</VersionMajor>
+	    <Guid>58fbcf7c-e7a9-467c-80b3-fc65e8fcca08</Guid>
+	    <Lcid>0</Lcid>
+	    <Isolated>false</Isolated>
+	    <EmbedInteropTypes>true</EmbedInteropTypes>
+	  </COMReference>
+	</ItemGroup>
 
-  <ItemGroup>
-    <ProjectReference Include="..\CryBackup.CommonData\CryBackup.CommonData.csproj" />
-  </ItemGroup>
+	<ItemGroup>
+		<PackageReference Include="CryLib.Core" Version="3.0.2" />
+		<PackageReference Include="CryLib.Network" Version="2.1.1" />
+		<PackageReference Include="Microsoft.Extensions.Hosting" Version="8.0.0" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<ProjectReference Include="..\CryBackup.CommonData\CryBackup.CommonData.csproj" />
+	</ItemGroup>
 </Project>

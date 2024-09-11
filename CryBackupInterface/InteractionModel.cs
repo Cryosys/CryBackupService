@@ -64,7 +64,7 @@ namespace CryBackupInterface
 
 		public void Connect()
 		{
-			_protocol.Connect(new System.Net.IPEndPoint(System.Net.IPAddress.Parse("127.0.0.1"), 61321));
+			_protocol.Connect(new System.Net.IPEndPoint(System.Net.IPAddress.Parse("127.0.0.1"), 8080));
 
 			if (!_protocol.Connected)
 			{

@@ -21,7 +21,7 @@
             <ColumnDefinition/>
         </Grid.ColumnDefinitions>
 
-        <CryMenu:GroupMenu Grid.Column="0" Background="#FF454545" IsCollapsed="false" ItemPressed="Menu_ItemPressed">
+        <CryMenu:GroupMenu Grid.Column="0" Background="#FF454545" SelectedItemColor="#FF656565" IsCollapsed="false" ItemPressed="Menu_ItemPressed">
             <CryMenu:CryMenuItem Title="Explorer" Image="/Images/Explorer.svg"/>
             <CryMenu:CryMenuItem Title="Tasks" Image="/Images/Tasks.svg"/>
             <CryMenu:CryMenuItem Title="Service Settings" Image="/Images/Settings.svg"/>
